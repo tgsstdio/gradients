@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <title>
+            gradients
+        </title>
+		<script data-main="scripts/main" src="node_modules/requirejs/bin/r.js"></script>
+		
+        <script type="text/javascript" src="node_modules/regression/build/regression.min.js" />     
+    </head>        
+    <body>
+        <head>
+            <!-- Plotly.js -->
+            <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        </head>
+
+        <!-- <img id="input" src="bokeh-gradient.bmp" /> -->
+        <input type="file" id="userImage" />
+        <img id="input" src="" />
+
+        <canvas id="pad">
+            Your browser does not support the HTML5 canvas tag.   
+        </canvas>
+        <span id="zone"></span>
+        <span id="list"></span>
+        <div id="myDiv" style="width: 480px; height: 400px;"><!-- Plotly chart will be drawn inside this DIV --></div>
+
+        <script src="scripts/graphs.js"></script>
+
+        <script type="text/javascript">
+
+            function handleFileSelect(evt)
+            {
+                var files = evt.target.files;
+
+                // files is a FileList of File objects. List some properties.
+                var output = [];
+                for (var i = 0, f; f = files[i]; i++) {
+                    output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                                f.size, ' bytes, last modified: ',
+                                f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+                                '</li>');
+
+                    // Only process image files.
+                    if (!f.type.match('image.*')) {
+                        continue;
+                    }
+
+                    var img = document.getElementById("input");
+                    img.src = window.URL.createObjectURL(f);
+                    
+                    img.onload = function()
+                    {
+                        window.URL.revokeObjectURL(this.src);
+
+                        var c = document.getElementById("pad");
+                        var ctx = c.getContext("2d");
+                        var img = document.getElementById("input");  
+
+                        ctx.drawImage(img, 0, 0);
+                    
+                    var imgData = ctx.getImageData(0, 0, c.width, c.height);
+                    // invert colors
+                    var i;
+                    for (i = 0; i < imgData.data.length; i += 4) {
+                        imgData.data[i] = 255 - imgData.data[i];
+                        imgData.data[i+1] = 255 - imgData.data[i+1];
+                        imgData.data[i+2] = 255 - imgData.data[i+2];
+                        imgData.data[i+3] = 255;
+                    }
+                    ctx.putImageData(imgData, 0, 0);                                                       
+                    };
+                }
+                document.getElementById('zone').innerHTML = '<ul>' + output.join('') + '</ul>';
+            };
+
+            document.getElementById("userImage").addEventListener('change', handleFileSelect, false);
+        </script>
+    </body>
+
+</html>

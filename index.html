@@ -1,0 +1,23 @@
+<html>
+  <meta http-equiv="content-type" content="text/html; charset=UTF8" />
+  <head>
+    <title>webpack 2 demo</title>
+  </head>
+  <body>
+
+    <!-- <img id="input" src="bokeh-gradient.bmp" /> -->
+    <input type="file" id="userImage" />
+    <img id="input" src="" />
+
+    <canvas id="pad">
+        Your browser does not support the HTML5 canvas tag.   
+    </canvas>
+    <span id="fileInfo"></span>
+    <span id="list"></span>
+
+    <div id="myDiv" style="width: 480px; height: 400px;"><!-- Plotly chart will be drawn inside this DIV --></div>
+    
+    <!--REMEMBER TO DECLARE FILES LAST -->
+    <script src="dist/bundle.js"></script>
+  </body>
+</html>
