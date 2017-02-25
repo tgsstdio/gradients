@@ -4,8 +4,9 @@ const HOST = '127.0.0.1';
 var http = require('http');
 var fs = require('fs');
 var path = require('path');
+var process = require('process');
 
-http.createServer(function (request, response) {
+var server = http.createServer(function (request, response) {
     console.log('request ', request.url);
 
     var filePath = '.' + request.url;
@@ -56,3 +57,13 @@ http.createServer(function (request, response) {
 }).listen(PORT, HOST);
 
 console.log("Server at http://" + HOST + ':' + PORT.toString() + '/');
+
+process.on('SIGINT', function() 
+{
+	server.close();
+});
+
+process.on('exit', function()
+{
+	console.log('Bye!');
+});
